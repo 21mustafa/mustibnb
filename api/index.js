@@ -5,6 +5,10 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const cookieParser = require('cookie-parser');
 const imageDownloader = require('image-downloader')
+const multer = require('multer');
+const fs = require('fs');
+
+const PlaceModel = require('./models/Place')
 const UserModel = require('./models/User');
 
 const app = express()
@@ -97,4 +101,49 @@ app.post('/upload-by-link', async (req, res) => {
     res.json(newName)
 })
 
+const photosMiddleware = multer({dest: 'uploads/'})
+app.post('/upload', photosMiddleware.array('photos', 100) ,(req, res) => {
+    const files = req.files
+    const uploadedFiles = []
+    for (let file of files) {
+        const fileNameParts = file.originalname.split('.')
+        const extension = fileNameParts[fileNameParts.length - 1]
+        const newPath = file.path + '.' + extension
+        fs.renameSync(file.path, newPath)
+        uploadedFiles.push(newPath.replace('uploads/', ''))
+    }
+    res.json(uploadedFiles)
+})
+
+app.post('/places', (req, res) => {
+    const {token} = req.cookies;
+    jwt.verify(token, jwtSecret, {}, async (err, userData) => {
+        if (err) throw err
+        const {
+            title, 
+            address, 
+            photos, 
+            description, 
+            perks, 
+            extraInfo, 
+            checkIn, 
+            checkOut, 
+            maxGuests
+        } = req.body
+        const placeDoc = await PlaceModel.create({
+            owner:  userData.id,
+            title,
+            address,
+            checkIn,
+            checkOut,
+            description,
+            extraInfo,
+            maxGuests,
+            perks,
+            photos 
+         })
+         res.json(placeDoc)
+    })
+
+})
 app.listen(4000)
