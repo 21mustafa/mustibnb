@@ -128,7 +128,8 @@ app.post('/places', (req, res) => {
             extraInfo, 
             checkIn, 
             checkOut, 
-            maxGuests
+            maxGuests,
+            price
         } = req.body
         const placeDoc = await PlaceModel.create({
             owner:  userData.id,
@@ -140,14 +141,15 @@ app.post('/places', (req, res) => {
             extraInfo,
             maxGuests,
             perks,
-            photos 
+            photos,
+            price
          })
          res.json(placeDoc)
     })
 
 })
 
-app.get('/places', (req, res) => {
+app.get('/user-places', (req, res) => {
     const {token} = req.cookies;
     jwt.verify(token, jwtSecret, {}, async (err, userData) => {
         if (err) throw err
@@ -173,7 +175,8 @@ app.put('/places', async (req, res) => {
         extraInfo, 
         checkIn, 
         checkOut, 
-        maxGuests
+        maxGuests,
+        price
     } = req.body
     
 
@@ -191,7 +194,8 @@ app.put('/places', async (req, res) => {
                 extraInfo, 
                 checkIn, 
                 checkOut, 
-                maxGuests
+                maxGuests,
+                price
             })
             await placeDoc.save()
             res.json('ok')
@@ -199,7 +203,10 @@ app.put('/places', async (req, res) => {
             res.statusCode(404).json('cannot update the doc')
         }
     })
+})
 
+app.get('/places', async (req, res) => {
+    res.json(await PlaceModel.find())
 })
 
 app.listen(4000)

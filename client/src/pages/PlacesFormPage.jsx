@@ -18,6 +18,7 @@ export const PlacesFormPage = () => {
   const [checkIn, setCheckIn] = useState("");
   const [checkOut, setCheckOut] = useState("");
   const [maxGuests, setMaxGuests] = useState(1);
+  const [price, setPrice] = useState(0);
 
   const navigate = useNavigate();
 
@@ -36,6 +37,7 @@ export const PlacesFormPage = () => {
       setCheckIn(data.checkIn);
       setCheckOut(data.checkOut);
       setMaxGuests(data.maxGuests);
+      setPrice(data.price);
     });
   }, [id]);
 
@@ -51,6 +53,7 @@ export const PlacesFormPage = () => {
       checkIn,
       checkOut,
       maxGuests,
+      price,
     };
     if (id) {
       await axios.put("/places", { id, ...placeData });
@@ -83,6 +86,18 @@ export const PlacesFormPage = () => {
             value={address}
             onChange={(e) => setAddress(e.target.value)}
           />
+        </PlaceInput>
+
+        <PlaceInput header={"Nightly Price"} description={""}>
+          <div className="flex">
+            <input
+              type="number"
+              placeholder="210"
+              value={price}
+              onChange={(e) => setPrice(e.target.value)}
+            />
+            <span className="text-xl ml-5 mt-2">CAD</span>
+          </div>
         </PlaceInput>
 
         <PlaceInput header={"Photos"} description={"the more is the better"}>
