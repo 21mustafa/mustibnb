@@ -38,7 +38,9 @@ export const BookingPage = () => {
           <div className="text-2xl">{booking.price}</div>
         </div>
       </div>
-      <PlaceGallery place={booking.place} />
+      <div className="flex flex-col items-center">
+        <PlaceGallery place={booking.place} />
+      </div>
     </div>
   );
 };
