@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { AccountNav } from "../AccountNav";
 import { Icon } from "../components/Icon";
+import { PlaceImage } from "../components/PlaceImage";
 
 export const PlacesPage = () => {
   const [places, setPlaces] = useState([]);
@@ -33,13 +34,7 @@ export const PlacesPage = () => {
               className="flex gap-4 bg-gray-100 p-5 rounded-2xl cursor-pointer"
             >
               <div className="flex w-32 h-32 bg-gray-300 grow shrink-0">
-                {place.photos.length > 0 && (
-                  <img
-                    className="object-cover"
-                    src={"http://127.0.0.1:4000/uploads/" + place.photos[0]}
-                    alt=""
-                  />
-                )}
+                <PlaceImage place={place} />
               </div>
               <div className="grow-0 shrink">
                 <h2 className="text-xl">{place.title}</h2>

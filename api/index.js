@@ -9,7 +9,8 @@ const multer = require('multer');
 const fs = require('fs');
 
 const PlaceModel = require('./models/Place')
-const UserModel = require('./models/User');
+const UserModel = require('./models/User')
+const BookingModel = require('./models/Booking');
 
 const app = express()
 app.use(express.json())
@@ -207,6 +208,29 @@ app.put('/places', async (req, res) => {
 
 app.get('/places', async (req, res) => {
     res.json(await PlaceModel.find())
+})
+
+app.post('/bookings', async (req, res) => {
+    const userData = await getUserDataFormToken(req)
+    const {place, checkIn, checkOut, phone, name, numOfGuests, price} = req.body
+    const doc = await BookingModel.create({
+        place, checkIn, checkOut, phone, name, numOfGuests, price, user: userData.id
+    })
+    res.json(doc)
+})
+
+const getUserDataFormToken = (req) => {
+    return new Promise((res,rej) => {
+        jwt.verify(req.cookies.token, jwtSecret, {}, async (err, userData) => {
+            if (err) throw err
+            res(userData) 
+        })
+    }) 
+}
+
+app.get('/bookings', async (req, res) => {
+    const userData = await getUserDataFormToken(req)
+    res.json(await BookingModel.find({user: userData.id}).populate('place'))
 })
 
 app.listen(4000)

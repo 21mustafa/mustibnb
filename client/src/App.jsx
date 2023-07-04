@@ -3,8 +3,11 @@ import { useEffect } from "react";
 import { Route, Routes } from "react-router-dom";
 import "./App.css";
 import { Layout } from "./Layout";
+import { BookingPage } from "./pages/BookingPage";
+import { BookingsPage } from "./pages/BookingsPage";
 import { IndexPage } from "./pages/IndexPage";
 import { LoginPage } from "./pages/LoginPage";
+import { PlacePage } from "./pages/PlacePage";
 import { PlacesFormPage } from "./pages/PlacesFormPage";
 import { PlacesPage } from "./pages/PlacesPage";
 import { ProfilePage } from "./pages/ProfilePage";
@@ -26,6 +29,9 @@ function App() {
           <Route path="/account/places" element={<PlacesPage />} />
           <Route path="/account/places/new" element={<PlacesFormPage />} />
           <Route path="/account/places/:id" element={<PlacesFormPage />} />
+          <Route path="/place/:id" element={<PlacePage />} />
+          <Route path="/account/bookings" element={<BookingsPage />} />
+          <Route path="/account/bookings/:id" element={<BookingPage />} />
         </Route>
       </Routes>
     </UserContextProvider>

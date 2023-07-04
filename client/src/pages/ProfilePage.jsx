@@ -7,7 +7,6 @@ import { PlacesPage } from "./PlacesPage";
 
 export const ProfilePage = () => {
   const { ready, user, setUser } = useContext(UserContext);
-  const { subpage } = useParams();
 
   const logout = async () => {
     await axios.post("/logout");
@@ -27,7 +26,7 @@ export const ProfilePage = () => {
       <AccountNav />
 
       <div className="text-center max-w-lg mx-auto">
-        Logged in as {user.name} (user.email)
+        Logged in as {user.name} ({user.email})
         <button className="primary max-w-sm mt-4" onClick={logout}>
           Logout
         </button>
